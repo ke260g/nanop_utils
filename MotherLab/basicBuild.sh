@@ -3,6 +3,7 @@
 # these strings need to be 'echo' with '-e' option
 CONFIRM_PROMPT="[\e[32;1mYes\e[0m/\e[31;1mNo\e[0m]\c"
 RE_CONFIRM="\e[31;40mPlease input 'yes' or 'no'.\e[0m"
+LXDE_AUTOSTART_CONFIG_PATH="/home/fa/.config/lxsession/LXDE/autostart"
 
 function first_build {
 	# edit /etc/hosts
@@ -51,8 +52,9 @@ function second_build {
 	systemctl enable vsftpd.service
 	systemctl enable nfs-kernel-server
 	usermod -G tty,dialout,sys,bin,adm,ftp,uucp -a fa
-	echo "@ifconfig eth0 192.168.5.100"
+	echo "@ifconfig eth0 192.168.5.100" > ${LXDE_AUTOSTART_CONFIG_PATH}
 
+    # fix input-method bug in qtcreator
 QT5INPUTLIB=/usr/lib/arm-linux-gnueabihf/qt5/plugins/platforminputcontexts
 QTCREATORLIB=/usr/lib/arm-linux-gnueabihf/qtcreator/plugins
 	cp -a ${QT5INPUTLIB} ${QTCREATORLIB}
