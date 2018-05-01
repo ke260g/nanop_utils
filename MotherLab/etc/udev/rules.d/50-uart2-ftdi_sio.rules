@@ -1,0 +1,1 @@
+ACTION=="add",DRIVERS=="ftdi_sio",SYMLINK+="uart2"

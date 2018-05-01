@@ -1,0 +1,13 @@
+[Unit]
+Description=ThCamera Message Echo Daemon
+After=systemd-user-sessions.service
+
+[Service]
+Type=forking
+ExecStart=/usr/local/sbin/TH/ThCamera
+User=root
+PIDFile=/var/run/TH/ThCamera.pid
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

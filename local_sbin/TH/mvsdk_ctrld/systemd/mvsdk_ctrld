@@ -1,0 +1,68 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          mvsdk_ctrld
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: MVSDK Control Daemon
+# Description:       MVSDK Control Daemon
+### END INIT INFO
+
+# place this script in /etc/init.d
+
+DAEMON=/usr/local/sbin/TH/mvsdk_ctrld
+DESC=mvsdk_ctrld
+NAME=mvsdk_ctrld
+
+. /lib/lsb/init-functions
+
+PID_FILE="/var/run/mvsdk_ctrld.pid"
+LOG_FILE="/var/log/mvsdk_ctrld.log"
+
+start () {
+	ps ax | awk '{print $1}' | grep -q `cat ${PID_FILE}`
+	if [ `echo $?` -eq 0 ]; then
+		echo "Daemon is already running"
+		return
+	fi
+
+	test -f ${PID_FILE} && rm ${PID_FILE}
+	test -f ${LOG_FILE} &&  rm ${LOG_FILE}
+	/usr/local/sbin/TH/mvsdk_ctrld
+}
+
+stop () {
+	test -f ${LOG_FILE} && rm ${LOG_FILE}
+	test -f ${PID_FILE} && kill `cat ${PID_FILE}`
+}
+
+status () {
+	test -f ${LOG_FILE} && cat ${LOG_FILE}
+}
+
+case "$1" in
+start)
+	start
+	return 0
+	;;
+stop)
+	stop
+	return 0
+	;;
+status)
+	status
+	return 0
+	;;
+restart|force-reload)
+	stop
+	sleep 1
+	start
+	return 0
+	;;
+*)
+	echo "Usage: $0 {start|stop|restart|status|force-reload}"
+esac

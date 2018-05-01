@@ -1,0 +1,42 @@
+before using basicBuild.sh, add deb-repo
+    deb http://ftp.cn.debian.org/debian sid main
+then
+    >_ apt-get update
+    >_ apt-get upgrade
+    >_ apt-get install lxqt
+
+    >_ chkconfig        # to manage "/etc/rc*.d"
+
+eflasher sdcard partition
+/dev/<p1> mkfs.vfat 10G
+/dev/<p2> mkfs.ext4 64M
+/dev/<p3> mkfs.ext4 1G
+
+elflahser sdcard bootargs
+     1	bootcmd=$bloader 0x48000000 $kernel;$bloader 0x49000000 root.img.gz;bootm 0x48000000
+     2	kernel=uImage
+     3	baudrate=115200
+     4	ethaddr=00:e2:1c:ba:e8:60
+     5	ipaddr=192.168.1.165
+     6	serverip=192.168.1.164
+     7	gatewayip=192.168.1.254
+     8	netmask=255.255.255.0
+     9	bootfile=uImage
+    10	bloader=ext4load mmc 0:2
+    11	bootargs=console=ttySAC0,115200n8 root=/dev/mmcblk0p3 rootfstype=ext4 rootwait init=/sbin/init systemd.show_status=false g_ether.host_addr=82:cf:ce:fa:68:18 console=tty1
+    12	bootdelay=1
+    13	firstboot=0
+
+# i3 desktop
+ln -sf /usr/bin/i3 /etc/alternatives/x-session-manager
+ln -sf /usr/bin/startlxde /etc/alternatives/x-session-manager
+
+# backup the opencv2, files provided by libopencv-dev
+mkdir ~/opencv2_backup
+mkdir ~/opencv2_backup/include
+cd /usr
+find /usr/lib -name "*opencv*" | cpio -Bvmdpu ~/opencv2_backup
+find /usr/include -type d -name "*opencv*" -exec mv {} ~/opencv2_backup/include \;
+
+# make android-sparse-image, as size of emmc is 7G
+make_ext4fs -l 7G -s -L linux rootfs.img src_dir

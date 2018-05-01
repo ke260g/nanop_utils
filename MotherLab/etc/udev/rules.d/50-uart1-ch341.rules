@@ -1,0 +1,1 @@
+ACTION=="add",DRIVERS=="ch341",SYMLINK+="uart1"
