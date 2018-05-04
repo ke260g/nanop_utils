@@ -7,7 +7,6 @@ Type=forking
 ExecStart=/usr/local/sbin/TH/mvsdk_ctrld
 User=root
 PIDFile=/var/run/mvsdk_ctrld.pid
-Restart=on-abort
 
 [Install]
 WantedBy=multi-user.target
